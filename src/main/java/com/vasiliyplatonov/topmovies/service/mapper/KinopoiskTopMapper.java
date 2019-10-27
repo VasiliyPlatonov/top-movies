@@ -1,8 +1,10 @@
-package service.mapper;
+package com.vasiliyplatonov.topmovies.service.mapper;
 
-import domian.Movie;
+import com.vasiliyplatonov.topmovies.domain.Movie;
 import org.jsoup.nodes.Element;
+import org.springframework.stereotype.Service;
 
+@Service
 public class KinopoiskTopMapper implements MovieMapper<Element> {
 
     @Override

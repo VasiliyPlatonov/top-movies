@@ -1,20 +1,24 @@
-package service;
+package com.vasiliyplatonov.topmovies.service;
 
-import domian.Movie;
-import service.mapper.MovieMapper;
+import com.vasiliyplatonov.topmovies.domain.Movie;
+import com.vasiliyplatonov.topmovies.service.mapper.MovieMapper;
+import com.vasiliyplatonov.topmovies.service.topsource.TopSource;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import service.topsource.TopSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service("movieService")
 public class MovieServiceImpl implements MovieService {
 
-    private TopSource<Elements> topSource;
-    private MovieMapper<Element> mapper;
+    private final TopSource<Elements> topSource;
+    private final MovieMapper<Element> mapper;
 
+    @Autowired
     public MovieServiceImpl(TopSource<Elements> topSource, MovieMapper<Element> mapper) {
         this.topSource = topSource;
         this.mapper = mapper;
@@ -24,7 +28,7 @@ public class MovieServiceImpl implements MovieService {
     public List<Movie> fetchTop() throws IOException {
         Elements ratingRows = topSource.getTop();
         return ratingRows.stream()
-                .map(row -> mapper.map(row))
+                .map(mapper::map)
                 .collect(Collectors.toList());
 
     }

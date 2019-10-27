@@ -1,6 +1,6 @@
-package service;
+package com.vasiliyplatonov.topmovies.service;
 
-import domian.Movie;
+import com.vasiliyplatonov.topmovies.domain.Movie;
 
 import java.io.IOException;
 import java.util.List;

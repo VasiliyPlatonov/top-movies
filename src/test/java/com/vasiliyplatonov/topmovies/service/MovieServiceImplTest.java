@@ -1,9 +1,9 @@
-package service;
+package com.vasiliyplatonov.topmovies.service;
 
-import domian.Movie;
-import service.mapper.KinopoiskTopMapper;
+import com.vasiliyplatonov.topmovies.domain.Movie;
+import com.vasiliyplatonov.topmovies.service.mapper.KinopoiskTopMapper;
 import org.junit.Test;
-import service.topsource.KinopoiskTop;
+import com.vasiliyplatonov.topmovies.service.topsource.KinopoiskTop;
 
 import java.io.IOException;
 import java.time.Year;

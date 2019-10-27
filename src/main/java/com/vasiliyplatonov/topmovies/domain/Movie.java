@@ -1,4 +1,4 @@
-package domian;
+package com.vasiliyplatonov.topmovies.domain;
 
 import java.util.Objects;
 

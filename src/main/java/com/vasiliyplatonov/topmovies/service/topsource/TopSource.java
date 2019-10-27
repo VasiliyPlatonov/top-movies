@@ -1,4 +1,4 @@
-package service.topsource;
+package com.vasiliyplatonov.topmovies.service.topsource;
 
 import java.io.IOException;
 
