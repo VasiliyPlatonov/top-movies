@@ -1,9 +1,11 @@
 package com.vasiliyplatonov.topmovies.service;
 
+import com.vasiliyplatonov.topmovies.Main;
 import com.vasiliyplatonov.topmovies.domain.Movie;
-import com.vasiliyplatonov.topmovies.service.mapper.KinopoiskTopMapper;
+import org.assertj.core.api.AssertionsForClassTypes;
+import org.junit.Before;
 import org.junit.Test;
-import com.vasiliyplatonov.topmovies.service.topsource.KinopoiskTop;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.time.Year;
@@ -11,9 +13,16 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-
 public class MovieServiceImplTest {
-    private MovieService service = new MovieServiceImpl(new KinopoiskTop(), new KinopoiskTopMapper());
+    private MovieService service;
+
+    @Before
+    public void setUp() {
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext(Main.class);
+        service = context.getBean(MovieService.class);
+        AssertionsForClassTypes.assertThat(service).isNotNull();
+    }
 
     @Test
     public void fetchKinopoiskTop() throws IOException {
@@ -40,7 +49,6 @@ public class MovieServiceImplTest {
                     .isNotZero();
             assertThat(m.getPosition()).isBetween(1, 250);
         });
-
 
     }
 }

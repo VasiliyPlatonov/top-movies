@@ -40,5 +40,9 @@ build/
 
 
 ### Logging ###
-.log
+*.log
 /logs
+
+### Database ###
+*.db
+/data
