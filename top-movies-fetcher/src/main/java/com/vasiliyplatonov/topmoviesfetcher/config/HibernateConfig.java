@@ -1,4 +1,4 @@
-package com.vasiliyplatonov.topmoviesfatcher.config;
+package com.vasiliyplatonov.topmoviesfetcher.config;
 
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
@@ -31,7 +31,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.vasiliyplatonov.topmoviesfatcher.domain");
+        sessionFactory.setPackagesToScan("com.vasiliyplatonov.topmoviesfetcher.entity");
         sessionFactory.setHibernateProperties(hibernateProperties());
 
         return sessionFactory;
@@ -44,7 +44,6 @@ public class HibernateConfig {
         dataSource.setUrl(env.getRequiredProperty("url"));
         dataSource.setUsername(env.getRequiredProperty("username"));
         dataSource.setPassword(env.getRequiredProperty("password"));
-
         return dataSource;
     }
 

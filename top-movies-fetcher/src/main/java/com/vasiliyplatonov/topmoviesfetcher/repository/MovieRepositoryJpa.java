@@ -1,6 +1,6 @@
-package com.vasiliyplatonov.topmoviesfatcher.repository;
+package com.vasiliyplatonov.topmoviesfetcher.repository;
 
-import com.vasiliyplatonov.topmoviesfatcher.domain.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.entity.Movie;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -37,8 +37,8 @@ public class MovieRepositoryJpa implements MovieRepository {
     @Override
     public List<Movie> getAllByDate(LocalDate date) {
         TypedQuery<Movie> query = em.createQuery(
-                "select m from Movie m where m.receiptDate = :receiptDate",
-                Movie.class).setParameter("receiptDate", date);
+                "select m from Movie m where m.topDate = :topDate",
+                Movie.class).setParameter("topDate", date);
         return query.getResultList();
     }
 

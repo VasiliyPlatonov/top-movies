@@ -1,6 +1,6 @@
-package com.vasiliyplatonov.topmoviesfatcher.repository;
+package com.vasiliyplatonov.topmoviesfetcher.repository;
 
-import com.vasiliyplatonov.topmoviesfatcher.domain.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.entity.Movie;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.vasiliyplatonov.topmoviesfatcher.domain;
+package com.vasiliyplatonov.topmoviesfetcher.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,28 +27,19 @@ public class Movie {
     @Column(name = "position")
     private int position;
 
-    @Column(name = "receipt_date")
-    private LocalDate receiptDate;
+    @Column(name = "top_date")
+    private LocalDate topDate;
 
     public Movie() {
     }
 
-    public Movie(String title, String year, float rating, int votes, int position) {
+    public Movie(String title, String year, float rating, int votes, int position, LocalDate topDate) {
         this.title = title;
         this.year = year;
         this.rating = rating;
         this.votes = votes;
         this.position = position;
-        this.receiptDate = LocalDate.now();
-    }
-
-    public Movie(String title, String year, float rating, int votes, int position, LocalDate receiptDate) {
-        this.title = title;
-        this.year = year;
-        this.rating = rating;
-        this.votes = votes;
-        this.position = position;
-        this.receiptDate = receiptDate;
+        this.topDate = topDate;
     }
 
     public Long getId() {
@@ -95,12 +86,12 @@ public class Movie {
         this.position = position;
     }
 
-    public LocalDate getReceiptDate() {
-        return receiptDate;
+    public LocalDate getTopDate() {
+        return topDate;
     }
 
-    public void setReceiptDate(LocalDate receiptDate) {
-        this.receiptDate = receiptDate;
+    public void setTopDate(LocalDate topDate) {
+        this.topDate = topDate;
     }
 
     @Override
@@ -125,7 +116,7 @@ public class Movie {
                 ", rating=" + rating +
                 ", votes=" + votes +
                 ", position=" + position +
-                ", receiptDate=" + receiptDate +
+                ", topDate=" + topDate +
                 '}';
     }
 }

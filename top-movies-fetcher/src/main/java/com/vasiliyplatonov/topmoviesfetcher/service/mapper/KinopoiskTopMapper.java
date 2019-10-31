@@ -1,21 +1,23 @@
-package com.vasiliyplatonov.topmoviesfatcher.service.mapper;
+package com.vasiliyplatonov.topmoviesfetcher.service.mapper;
 
-import com.vasiliyplatonov.topmoviesfatcher.domain.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.entity.Movie;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class KinopoiskTopMapper implements MovieMapper<Element> {
 
     @Override
-    public Movie map(Element row) {
+    public Movie map(Element row, LocalDate topDate) {
         String title = rowToTitle(row);
         String year = rowToYear(row);
         float rating = rowToRating(row);
         int votes = rowToVotes(row);
         int position = rowToPosition(row);
 
-        return new Movie(title, year, rating, votes, position);
+        return new Movie(title, year, rating, votes, position, topDate);
     }
 
     private static int rowToPosition(Element row) {
@@ -41,7 +43,7 @@ public class KinopoiskTopMapper implements MovieMapper<Element> {
         String yearPattern = "(\\s\\(\\d{4}\\))";
 
         String title = row.children().get(1).select("span.text-grey").text();
-        if (title.isBlank()) { // if it is russian movie
+        if (title == null || title.isEmpty()) { // if it is russian movie
             title = row.children().get(1).select("a")
                     .text()
                     .replaceFirst(yearPattern, "");

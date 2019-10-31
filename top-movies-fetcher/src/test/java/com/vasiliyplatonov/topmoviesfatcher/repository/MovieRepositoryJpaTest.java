@@ -1,7 +1,8 @@
 package com.vasiliyplatonov.topmoviesfatcher.repository;
 
-import com.vasiliyplatonov.topmoviesfatcher.Main;
-import com.vasiliyplatonov.topmoviesfatcher.domain.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.Main;
+import com.vasiliyplatonov.topmoviesfetcher.entity.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.repository.MovieRepository;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -31,9 +32,12 @@ public class MovieRepositoryJpaTest {
     @Test
     public void stage1_insertAll() {
         List<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("test movie1", "2009", 8.3f, 1000, 12));
-        movies.add(new Movie("test movie2", "1997", 4.3f, 10000, 30));
-        movies.add(new Movie("test movie3", "2019", 7.3f, 710000, 30, LocalDate.of(2019, 4, 10)));
+        LocalDate nowDate = LocalDate.now();
+        LocalDate notNowDate = LocalDate.of(2019, 4, 10);
+
+        movies.add(new Movie("test movie1", "2009", 8.3f, 1000, 12, nowDate));
+        movies.add(new Movie("test movie2", "1997", 4.3f, 10000, 30, nowDate));
+        movies.add(new Movie("test movie3", "2019", 7.3f, 710000, 30, notNowDate));
 
         repository.insertAll(movies);
     }
@@ -51,17 +55,24 @@ public class MovieRepositoryJpaTest {
 //        // Check that all properties was filled in the each movie
         movies.forEach(m -> {
             assertThat(m).isNotNull();
+
             assertThat(m.getTitle()).isNotBlank();
+
             assertThat(Integer.parseInt(m.getYear()))
                     .isNotNegative()
                     .isNotZero()
                     .isNotNull()
                     .isLessThan(Year.now().getValue() + 30); // year should be less than now +30 years
+
             assertThat(m.getRating()).isBetween(0f, 10f);
+
             assertThat(m.getVotes())
                     .isNotNegative()
                     .isNotZero();
+
             assertThat(m.getPosition()).isBetween(1, 250);
+
+            assertThat(m.getTopDate()).isNotNull();
         });
     }
 
@@ -78,18 +89,17 @@ public class MovieRepositoryJpaTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        movByNow.forEach(m -> {
-            assertThat(m.getReceiptDate()).isEqualTo(dateNow);
-        });
+        movByNow.forEach(m ->
+                assertThat(m.getTopDate()).isEqualTo(dateNow));
 
         // Check 2019-4-10
         assertThat(movByTestDate)
                 .isNotEmpty()
                 .hasSize(1);
 
-        movByTestDate.forEach(m -> {
-            assertThat(m.getReceiptDate()).isEqualTo(testDate);
-        });
+        movByTestDate.forEach(m ->
+            assertThat(m.getTopDate()).isEqualTo(testDate)
+        );
     }
 }
 

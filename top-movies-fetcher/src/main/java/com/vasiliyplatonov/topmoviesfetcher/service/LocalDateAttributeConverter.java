@@ -1,4 +1,4 @@
-package com.vasiliyplatonov.topmoviesfatcher.service;
+package com.vasiliyplatonov.topmoviesfetcher.service;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
