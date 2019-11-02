@@ -33,9 +33,9 @@ public class MovieTopFetcherImpl implements MovieTopFetcher {
 
     @Override
     public List<Movie> fetchTopByDate(LocalDate topDate) throws GettingTopException {
-        Elements ratingRows = topSource.getCurrentTop();
+        Elements topRows = topSource.getTopByDate(topDate);
         LOG.info("The top of movies was fetched");
-        return ratingRows.stream()
+        return topRows.stream()
                 .map(row -> mapper.map(row, topDate))
                 .collect(Collectors.toList());
     }

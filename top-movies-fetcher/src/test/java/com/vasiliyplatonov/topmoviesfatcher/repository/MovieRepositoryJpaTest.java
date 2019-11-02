@@ -1,14 +1,19 @@
 package com.vasiliyplatonov.topmoviesfatcher.repository;
 
+import com.vasiliyplatonov.topmoviesfatcher.TestContextConfiguration;
 import com.vasiliyplatonov.topmoviesfetcher.Main;
 import com.vasiliyplatonov.topmoviesfetcher.entity.Movie;
 import com.vasiliyplatonov.topmoviesfetcher.repository.MovieRepository;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
@@ -19,12 +24,26 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MovieRepositoryJpaTest {
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+
     private MovieRepository repository;
+
+    @BeforeClass
+    public static void deleteTestDb() {
+        final String dbPath = "./top_movies_test.mv.db";
+        File dbFile = new File(dbPath);
+        if (dbFile.exists()) {
+            boolean isDeleted = dbFile.delete();
+            if (!isDeleted) {
+                LOG.warn("Test database did not delete. Database path: " + dbPath);
+            }
+        }
+    }
 
     @Before
     public void setUp() {
         AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(Main.class);
+                new AnnotationConfigApplicationContext(TestContextConfiguration.class);
         repository = context.getBean(MovieRepository.class);
         assertThat(repository).isNotNull();
     }
@@ -98,7 +117,7 @@ public class MovieRepositoryJpaTest {
                 .hasSize(1);
 
         movByTestDate.forEach(m ->
-            assertThat(m.getTopDate()).isEqualTo(testDate)
+                assertThat(m.getTopDate()).isEqualTo(testDate)
         );
     }
 }

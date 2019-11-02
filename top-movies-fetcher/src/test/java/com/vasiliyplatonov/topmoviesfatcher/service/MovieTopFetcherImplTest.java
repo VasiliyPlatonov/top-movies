@@ -1,6 +1,6 @@
 package com.vasiliyplatonov.topmoviesfatcher.service;
 
-import com.vasiliyplatonov.topmoviesfetcher.Main;
+import com.vasiliyplatonov.topmoviesfatcher.TestContextConfiguration;
 import com.vasiliyplatonov.topmoviesfetcher.entity.Movie;
 import com.vasiliyplatonov.topmoviesfetcher.service.MovieTopFetcher;
 import com.vasiliyplatonov.topmoviesfetcher.service.topsource.GettingTopException;
@@ -21,7 +21,7 @@ public class MovieTopFetcherImplTest {
     @Before
     public void setUp() {
         AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(Main.class);
+                new AnnotationConfigApplicationContext(TestContextConfiguration.class);
         topFetcher = context.getBean(MovieTopFetcher.class);
         AssertionsForClassTypes.assertThat(topFetcher).isNotNull();
     }
@@ -48,10 +48,9 @@ public class MovieTopFetcherImplTest {
 
     @Test
     public void fetchTopByDate() throws GettingTopException {
-        LocalDate date = LocalDate.of(2019, 4, 10);
+        LocalDate date = LocalDate.of(2019, 11, 1);
 
         List<Movie> movies = topFetcher.fetchTopByDate(date);
-        movies.forEach(System.out::println);
 
         // Check that movies not null and was filled
         assertThat(movies)
