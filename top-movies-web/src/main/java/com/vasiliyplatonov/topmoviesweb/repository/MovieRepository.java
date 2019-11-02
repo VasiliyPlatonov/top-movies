@@ -1,6 +1,6 @@
 package com.vasiliyplatonov.topmoviesweb.repository;
 
-import com.vasiliyplatonov.topmoviesweb.domain.Movie;
+import com.vasiliyplatonov.topmoviesweb.entity.Movie;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,19 +8,19 @@ import java.util.List;
 public interface MovieRepository {
 
     /**
-     * Return all
+     * Returns all movies with a specific date
      *
      * @param date - specific date of rating
      * */
     List<Movie> getAllByDate(LocalDate date);
 
     /**
-     * Return specific count of entity
+     * Returns the first 'n' entities with a specific date
      *
      * @param date - specific date of rating
-     * @param n - count of movies from rating with specific date
+     * @param n - number of the first movies from rating
      * */
-    List<Movie> getNByDate(LocalDate date, int n);
+    List<Movie> getFirstNByDate(LocalDate date, int n);
 
     List<Movie> getAll();
 }

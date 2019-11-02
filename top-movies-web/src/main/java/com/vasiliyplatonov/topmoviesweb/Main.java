@@ -17,7 +17,7 @@ import java.io.File;
 @ComponentScan
 @PropertySource("classpath:app.properties")
 public class Main {
-    private static final Logger LOG = LoggerFactory.getLogger(com.vasiliyplatonov.topmoviesfatcher.Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private Environment env;
 
@@ -63,4 +63,18 @@ public class Main {
 
         return tomcat().addContext(contextPath, docBase);
     }
+
+//    @Bean
+//    public MovieTopFetcherImpl KinopoiskTopFetcher() {
+//        return new MovieTopFetcherImpl(
+//                new KinopoiskTop(),
+//                new KinopoiskTopMapper(),
+//                fetcherMovieRepository());
+////        return KinopoiskTopFetcher();
+//    }
+//
+//    @Bean
+//    public MovieRepository fetcherMovieRepository() {
+//        return new MovieRepositoryJpa();
+//    }
 }

@@ -1,56 +1,81 @@
 package com.vasiliyplatonov.topmoviesweb.controller;
 
 
-import com.vasiliyplatonov.topmoviesweb.domain.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.service.topsource.GettingTopException;
+import com.vasiliyplatonov.topmoviesweb.entity.Movie;
+import com.vasiliyplatonov.topmoviesweb.service.ApplicationContextHolder;
 import com.vasiliyplatonov.topmoviesweb.service.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
-@Service
+
 public class KinopoiskTopByDate extends HttpServlet {
+    private static final Logger LOG = LoggerFactory.getLogger(KinopoiskTopByDate.class);
 
-    private ApplicationContext appCxt;
+    private final ApplicationContext ctx;
+    private int topNum;
+    private LocalDate topDate;
 
-    @Autowired
-    public KinopoiskTopByDate(ApplicationContext appCxt) {
-        this.appCxt = appCxt;
+
+    public KinopoiskTopByDate() {
+        ctx = ApplicationContextHolder.getApplicationContext();
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        boolean dateError = false;
+
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
         PrintWriter w = resp.getWriter();
-        HttpSession session = req.getSession();
 
-//        if (session.getAttribute("mService") == null) {
-//            MovieService movieService = new MovieServiceImpl(
-//                    new KinopoiskTop(),
-//                    new KinopoiskTopMapper(),
-//                    new MovieRepositoryJpa());
-//
-//            session.setAttribute("mService", movieService);
-//        }
+        if (req.getParameter("topNum") != null) {
+            try {
+                topNum = Integer.parseInt(req.getParameter("topNum"));
+            } catch (NumberFormatException e) {
+                // Just return top from 10 movies
+            }
+        } else {
+            topNum = 10;
+        }
 
-//        List<Movie> movies = ((MovieService) session.getAttribute("mService")).fetchTop();
+        if (req.getParameter("date") != null) {
+            try {
+                topDate = LocalDate.parse(req.getParameter("date"));
+                // if it is future
+                if (topDate.isAfter(LocalDate.now())) {
+                    dateError = true;
+                }
+            } catch (DateTimeParseException e) {
+                dateError = true;
+            }
+        } else {
+            topDate = LocalDate.now();
+        }
 
-        LocalDate date = LocalDate.now();
-        List<Movie> movies = appCxt.getBean(MovieService.class).getTenByDate(date);
-
+        List<Movie> movies = null;
+        try {
+            movies = ctx.getBean(MovieService.class)
+                    .getFirstNByDate(topDate, topNum);
+        } catch (GettingTopException e) {
+            LOG.error(e.getMessage(), e);
+        }
 
         w.println("<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
+                "<html lang=\"ru\">\n" +
                 "<head>\n" +
                 "    <meta charset=\"UTF-8\">\n" +
                 "    <title>10 лучших фильмов</title>\n" +
@@ -136,7 +161,12 @@ public class KinopoiskTopByDate extends HttpServlet {
                 "            flex: 0 0 16.666667%;\n" +
                 "            max-width: 16.666667%;\n" +
                 "        }\n" +
-                "\n" +
+                "        .col-12 {\n" +
+                "            -webkit-box-flex: 0;\n" +
+                "            -ms-flex: 0 0 100%;\n" +
+                "            flex: 0 0 100%;\n" +
+                "            max-width: 100%;\n" +
+                "        }\n" +
                 "        .col-6 {\n" +
                 "            -webkit-box-flex: 0;\n" +
                 "            -ms-flex: 0 0 50%;\n" +
@@ -194,17 +224,30 @@ public class KinopoiskTopByDate extends HttpServlet {
                 "        }\n" +
                 "        .top__actions-btn{\n" +
                 "            margin-left: 20px;\n" +
+                "        }" +
+                "        .alert-danger {\n" +
+                "            color: #721c24;\n" +
+                "            background-color: #f8d7da;\n" +
+                "            border-color: #f5c6cb;\n" +
                 "        }\n" +
+                "\n" +
+                "        .alert {\n" +
+                "            position: relative;\n" +
+                "            padding: .75rem 1.25rem;\n" +
+                "            margin-bottom: 1rem;\n" +
+                "            border: 1px solid transparent;\n" +
+                "            border-radius: .25rem;\n" +
+                "        }\n" +
+
                 "\n" +
                 "    </style>\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<div class=\"container\">\n" +
-                "    <div class=\"row\">\n" +
-                "        <div class=\"top\">\n" +
-                "            <h1 class=\"top__header\">10 лучших фильмов по версии портала КиноПоиск</h1>\n" +
-                "            <div class=\"top__date\">DATE</div>\n" +
-                "        </div>\n" +
+                "      <div class=\"top\">\n" +
+                "          <div class=\"row\">\n" +
+                "            <h1 class=\"top__header col-12\">10 лучших фильмов по версии портала КиноПоиск</h1>\n" +
+                "            <div class=\"top__date\">" + topDate + "</div>\n" +
                 "    </div>\n" +
                 "\n" +
                 "    <div class=\"row\">\n" +
@@ -221,20 +264,26 @@ public class KinopoiskTopByDate extends HttpServlet {
                 "                </thead>\n" +
                 "                <tbody>\n");
 
-        for (Movie movie : movies) {
-            w.println("<tr><th scope=\"row\">");
-            w.print(movie.getId());
-            w.println("  </th><td>");
-            w.print(movie.getTitle());
-            w.println("</td><td>");
-            w.println(movie.getYear());
-            w.println("</td><td>");
-            w.println(movie.getRating());
-            w.println("</td><td>");
-            w.println(movie.getVotes());
-            w.println("</td></tr>");
+        if (movies != null && !movies.isEmpty() && !dateError) {
+            for (Movie movie : movies) {
+                w.println("<tr><th scope=\"row\">");
+                w.print(movie.getId());
+                w.println("  </th><td>");
+                w.print(movie.getTitle());
+                w.println("</td><td>");
+                w.println(movie.getYear());
+                w.println("</td><td>");
+                w.println(movie.getRating());
+                w.println("</td><td>");
+                w.println(movie.getVotes());
+                w.println("</td></tr>");
+            }
+        } else if (movies == null || movies.isEmpty()) {
+            w.println(
+                    "<div class=\"alert alert-danger\" role=\"alert\">\n" +
+                            "Ошибка при получении рейтинга фильмов или рейтинга на такую дату нет!  Воспользуйтесь доставщиком рейтинга!\n" +
+                            "</div>");
         }
-
         w.println(
                 "                </tbody>\n" +
                         "            </table>\n" +
@@ -243,18 +292,25 @@ public class KinopoiskTopByDate extends HttpServlet {
                         "\n" +
                         "    <div class=\"row\">\n" +
                         "        <div class=\"top__actions\">\n" +
-                        "            <form action=\"KinopoiskTopByDate\">\n" +
+                        "            <form action=\"KinopoiskTopByDate\" method=\"POST\">\n" +
                         "                <div class=\"form-group row\">\n" +
                         "                    <label for=\"date\" class=\"col-2 col-form-label\">Введите дату</label>\n" +
                         "                    <div class=\"col-6\">\n" +
-                        "                        <input type=\"text\" class=\"form-control\" id=\"date\" placeholder=\"2019-4-27\">\n" +
+                        "                        <input type=\"text\" class=\"form-control\" id=\"date\" name=\"date\" placeholder=\"2019-4-27\">\n" +
                         "                    </div>\n" +
                         "                    <button type=\"submit\" class=\"btn top__actions-btn col-2\">Отправить</button>\n" +
-                        "                </div>\n" +
-                        "            </form>\n" +
+                        "                </div>\n");
+        if (dateError) {
+            w.println("<div class=\"alert alert-danger\" role=\"alert\">\n" +
+                    "    Неправильно введена дата!\n" +
+                    "</div>");
+        }
+        w.println(
+                "            </form>\n" +
                         "        </div>\n" +
                         "    </div>\n" +
                         "</div>\n" +
+                        "        </div>\n" +
                         "\n" +
                         "\n" +
                         "</body>\n" +
@@ -262,5 +318,11 @@ public class KinopoiskTopByDate extends HttpServlet {
 
         w.flush();
         w.close();
+    }
+
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        this.doGet(req, resp);
     }
 }

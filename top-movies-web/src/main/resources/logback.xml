@@ -28,11 +28,11 @@
         </encoder>
     </appender>
 
-    <logger name="com.vasiliyplatonov.topmoviesfatcher" level="debug" additivity="false">
+    <logger name="com.vasiliyplatonov.topmoviesweb" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.vasiliyplatonov.topmoviesfatcher" level="debug" additivity="false">
+    <logger name="com.vasiliyplatonov.topmoviesweb" level="debug" additivity="false">
         <appender-ref ref="FILE-ROLLING"/>
     </logger>
 

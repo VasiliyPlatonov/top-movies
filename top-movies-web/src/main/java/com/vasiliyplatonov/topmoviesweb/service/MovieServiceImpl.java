@@ -1,6 +1,7 @@
 package com.vasiliyplatonov.topmoviesweb.service;
 
-import com.vasiliyplatonov.topmoviesweb.domain.Movie;
+import com.vasiliyplatonov.topmoviesfetcher.service.topsource.GettingTopException;
+import com.vasiliyplatonov.topmoviesweb.entity.Movie;
 import com.vasiliyplatonov.topmoviesweb.repository.MovieRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,10 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository repo;
 
+
     @Autowired
-    public MovieServiceImpl(MovieRepository repository) {
-        this.repo = repository;
+    public MovieServiceImpl(MovieRepository repo) {
+        this.repo = repo;
     }
 
     @Override
@@ -29,5 +31,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> getAllByDate(LocalDate date) {
         return repo.getAllByDate(date);
+    }
+
+    @Override
+    public List<Movie> getFirstNByDate(LocalDate date, int n) throws GettingTopException {
+        return repo.getFirstNByDate(date, n);
     }
 }

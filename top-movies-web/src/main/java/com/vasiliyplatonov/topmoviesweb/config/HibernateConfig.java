@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:app.properties")
 @EnableTransactionManagement
 public class HibernateConfig {
 
@@ -31,7 +31,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.vasiliyplatonov.topmoviesfatcher.domain");
+        sessionFactory.setPackagesToScan("com.vasiliyplatonov.topmoviesweb.entity");
         sessionFactory.setHibernateProperties(hibernateProperties());
 
         return sessionFactory;
