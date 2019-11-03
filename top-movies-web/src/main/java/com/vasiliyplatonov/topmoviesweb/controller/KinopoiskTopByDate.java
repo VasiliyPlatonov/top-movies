@@ -24,7 +24,7 @@ public class KinopoiskTopByDate extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(KinopoiskTopByDate.class);
 
     private final ApplicationContext ctx;
-    private int topNum;
+    private int topNum = 10;
     private LocalDate topDate;
 
 
@@ -42,15 +42,6 @@ public class KinopoiskTopByDate extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         PrintWriter w = resp.getWriter();
 
-        if (req.getParameter("topNum") != null) {
-            try {
-                topNum = Integer.parseInt(req.getParameter("topNum"));
-            } catch (NumberFormatException e) {
-                // Just return top from 10 movies
-            }
-        } else {
-            topNum = 10;
-        }
 
         if (req.getParameter("date") != null) {
             try {

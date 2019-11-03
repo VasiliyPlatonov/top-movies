@@ -64,17 +64,4 @@ public class Main {
         return tomcat().addContext(contextPath, docBase);
     }
 
-//    @Bean
-//    public MovieTopFetcherImpl KinopoiskTopFetcher() {
-//        return new MovieTopFetcherImpl(
-//                new KinopoiskTop(),
-//                new KinopoiskTopMapper(),
-//                fetcherMovieRepository());
-////        return KinopoiskTopFetcher();
-//    }
-//
-//    @Bean
-//    public MovieRepository fetcherMovieRepository() {
-//        return new MovieRepositoryJpa();
-//    }
 }
