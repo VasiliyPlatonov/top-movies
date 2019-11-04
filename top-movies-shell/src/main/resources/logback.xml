@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="false">
 
     <property name="HOME_LOG" value="logs/topmovies.log"/>
 
@@ -28,16 +28,12 @@
         </encoder>
     </appender>
 
-    <logger name="com.vasiliyplatonov.topmovieshell" level="info" additivity="false">
+    <logger name="com.vasiliyplatonov.topmovieshell.command" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.vasiliyplatonov.topmovieshell" level="info" additivity="false">
-        <appender-ref ref="FILE-ROLLING"/>
-    </logger>
-
-    <root level="error">
-        <appender-ref ref="FILE-ROLLING"/>
+    <root level="info">
+        <appender-ref ref="FILE-ROLLING" level="error"/>
     </root>
 
 </configuration>

@@ -1,7 +1,8 @@
 package com.vasiliyplatonov.topmovieshell.command;
 
-import com.vasiliyplatonov.topmoviesfetcher.service.MovieTopFetcher;
-import com.vasiliyplatonov.topmoviesfetcher.service.topsource.GettingTopException;
+
+import com.vasiliyplatonov.topmovieshell.service.fetcher.MovieTopFetcher;
+import com.vasiliyplatonov.topmovieshell.service.topsource.GettingTopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
