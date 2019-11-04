@@ -34,8 +34,12 @@ public class H2TcpServerCommands {
     @PreDestroy
     @ShellMethod("Stop the h2 database server.")
     public void stop() {
-        tcpServer.stop();
-        LOG.info("The tcp h2 database server on the port 9090 has been stopped.");
+        if (isRunning(false)) {
+            tcpServer.stop();
+            LOG.info("The tcp h2 database server on the port 9090 has been stopped.");
+        }else {
+            LOG.info("The tcp h2 database server has not been started.");
+        }
     }
 
     @ShellMethod("Start the h2 database server.")
