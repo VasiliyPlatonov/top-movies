@@ -15,7 +15,6 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -102,13 +101,16 @@ public class Movie {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Movie movie = (Movie) o;
-        return id.equals(movie.id);
+
+        if (position != movie.position) return false;
+        return topDate.equals(movie.topDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return position;
     }
 
     @Override
