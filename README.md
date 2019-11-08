@@ -1,6 +1,6 @@
 # Top-Movies
 
-####Top-Movies-Sell commands:
+#### Top-Movies-Shell commands:
  - **start**: Start the h2 database server.
  - **stop**: Stop the h2 database server.
  - **get-top**: Fetch the top of the movies by date and save it in database. 
